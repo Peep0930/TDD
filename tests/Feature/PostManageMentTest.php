@@ -8,7 +8,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class PostTest extends TestCase
+class PostManageMentTest extends TestCase
 {
     use DatabaseMigrations;
     use RefreshDatabase;
@@ -16,14 +16,16 @@ class PostTest extends TestCase
     /** @test */
     public function New_Post_can_Be_add(){
         //$this->withoutExceptionHandling();
-        $response = $this->json('post','/CreatePost',[
-            'title' => '逗狗樂園 POS點餐系統',
+        $response = $this->json('post','/Posts',[
+            'title' => 'A Great Post System',
             'date' => Carbon::today()->format('Y-m-d'),
             'content' => '前台點餐Vue 發票上傳 列印發票Ｃ＃',
             'url' => 'www.google.com',
             'Is_Public' => true,
         ]);
-        $response->assertOk();
+        // $response->assertOk();
+        $response->assertRedirect(Post::first()->path());
+
         $this->assertCount(1,Post::all());  
     }
 
@@ -31,7 +33,7 @@ class PostTest extends TestCase
     public function a_title_is_required(){
         //$this->withoutExceptionHandling();
 
-        $response = $this->json('post','/CreatePost',[
+        $response = $this->json('post','/Posts',[
             'title' => '',
             'date' => Carbon::today()->format('Y-m-d'),
             'content' => '前台點餐Vue 發票上傳 列印發票Ｃ＃',
@@ -45,15 +47,15 @@ class PostTest extends TestCase
     public function a_post_can_update(){
         // $this->withoutExceptionHandling();
 
-        $this->json('post','/CreatePost',[
-            'title' => '逗狗樂園 POS點餐系統',
+        $this->json('post','/Posts',[
+            'title' => 'A Great Post System',
             'date' => Carbon::today()->format('Y-m-d'),
             'content' => '前台點餐Vue 發票上傳 列印發票Ｃ＃',
             'url' => 'www.google.com',
             'Is_Public' => true,
         ]);
-
-        $this->json('patch','/UpdatePost/'.Post::first()->id,[
+        $Post = Post::first();
+        $response = $this->json('patch',$Post->path(),[
             'title'=>'New Title',
             'date' => Carbon::today()->format('Y-m-d'),
             'content' => '前台點餐Vue 發票上傳 列印發票Ｃ＃',
@@ -61,6 +63,26 @@ class PostTest extends TestCase
             'Is_Public' => true,
         ]);
 
-        $this->assertEquals('New Title',Post::first()->title);
+        $this->assertEquals('New Title',$Post->fresh()->title);
+        $response->assertRedirect($Post->fresh()->path());
+    }
+
+    /** @test */
+    public function a_post_can_be_delete(){
+        $this->withoutExceptionHandling();
+        $this->json('POST','/Posts',[
+            'title' => 'A Great Post System',
+            'date' => Carbon::today()->format('Y-m-d'),
+            'content' => '前台點餐Vue 發票上傳 列印發票Ｃ＃',
+            'url' => 'www.google.com',
+            'Is_Public' => true,
+        ]);
+        $this->assertCount(1,Post::all());
+
+        
+        $response = $this->json('DELETE',Post::first()->path());
+        $this->assertCount(0,Post::all());
+        
+        $response->assertRedirect('/Posts');
     }
 }
