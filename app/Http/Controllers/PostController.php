@@ -3,28 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Post;
-use Illuminate\Http\Request;
-use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
-    public function create(CreatePostRequest $request){
-        Post::Create([
-            'title' => $request->title,
-            'date' => $request->date,
-            'content' => $request->content,
-            'url' => $request->url,
-            'Is_Public' => $request->Is_Public,
-        ]);
+    public function create(PostRequest $request){
+        Post::Create($request->all());
     }
 
-    public function Update(Post $post,CreatePostRequest $request){
-        $post->update([
-            'title' => $request->title,
-            'date' => $request->date,
-            'content' => $request->content,
-            'url' => $request->url,
-            'Is_Public' => $request->Is_Public,
-        ]);
+    public function Update(Post $post,PostRequest $request){
+        $post->update($request->all());
     }
 }
