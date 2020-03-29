@@ -13,5 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::POST('/CreatePost','PostController@Create')->name('CreatePost');
-Route::PATCH('/UpdatePost/{post}','PostController@Update')->name('UpdatePost');
+Route::POST('/Posts','PostController@Create')->name('CreatePost');
+Route::PATCH('/Posts/{post}','PostController@Update')->name('UpdatePost');
+Route::DELETE('/Posts/{post}','PostController@Destory')->name('DestoryPost');
+
+
+Route::POST('/Users','UserController@Create')->name('CreateUser');

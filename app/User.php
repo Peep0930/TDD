@@ -2,9 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -16,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'account', 'password', 'Is_Admin'
     ];
 
     /**
@@ -28,12 +29,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function setCreateAtAttribute($created_at){
+        //return Carbon::parse($this->Created_at)->format('Y-m-d');
+        $this->attributes['created_at'] = Carbon::parse($created_at)->format('Y-m-d');
+    }
 }
