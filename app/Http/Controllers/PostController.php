@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Http\Requests\PostRequest;
-use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {

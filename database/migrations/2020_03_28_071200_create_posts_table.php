@@ -20,6 +20,8 @@ class CreatePostsTable extends Migration
             $table->longtext('content');
             $table->string('url')->nullable();
             $table->boolean('is_Public');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

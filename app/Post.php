@@ -12,4 +12,12 @@ class Post extends Model
     public function path(){
         return '/Posts/'.$this->id;
     }
+
+    public function setUserIdAttribute($User){
+        $this->attributes['user_id'] = User::firstOrCreate([
+            'account' => $User,
+            'password' => bcrypt('123456'),
+            'name' => $User
+        ])->id;
+    }
 }
