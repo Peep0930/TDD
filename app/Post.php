@@ -20,4 +20,22 @@ class Post extends Model
             'name' => $User
         ])->id;
     }
+
+    public function setPrivateFor($User){
+        $this->Privates()->Create([
+            'user_id' => $User->id,
+            'start_time' => now()
+        ]);
+    }
+
+    public function CancelPrivate($User){
+        $this->Privates()->where('user_id',$User->id)->whereNull('end_time')->first()
+        ->update([
+            'end_time' => now(),
+        ]);
+    }
+
+    public function Privates(){
+        return $this->hasMany(PrivateList::class);
+    }
 }
