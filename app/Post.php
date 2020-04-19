@@ -29,8 +29,12 @@ class Post extends Model
     }
 
     public function CancelPrivate($User){
-        $this->Privates()->where('user_id',$User->id)->whereNull('end_time')->first()
-        ->update([
+        $Private = $this->Privates()->where('user_id',$User->id)->whereNull('end_time')->first();
+        if(is_null($Private)){
+            throw new \Exception();
+        }
+
+        $Private->update([
             'end_time' => now(),
         ]);
     }

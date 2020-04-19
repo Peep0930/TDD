@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PostPrivateTest extends TestCase
 {
-   
+
     use RefreshDatabase;
     use DatabaseMigrations;
     /** @test */
@@ -43,7 +43,7 @@ class PostPrivateTest extends TestCase
         $this->assertEquals(now(),PrivateList::first()->end_time);
     }
 
-    /** @test */   
+    /** @test */
     public function A_Post_Can_Be_Private_Twice(){
         $this->withoutExceptionHandling();
         $Post = factory(Post::class)->create();
@@ -69,6 +69,13 @@ class PostPrivateTest extends TestCase
 
     }
 
-    //Exception @todo
-    
+    /** @test */
+    public function if_not_work_exception_is_throw(){
+        $this->expectException(\Exception::class);
+        $Post = factory(Post::class)->create();
+        $User = factory(User::class)->create();
+        $Post->CancelPrivate($User);
+        $Post->CancelPrivate($User);
+
+    }
 }
